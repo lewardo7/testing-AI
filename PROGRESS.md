@@ -1,6 +1,6 @@
 # Progress Pengembangan CliniPath
 
-Pembaruan terakhir: 8 Juli 2026
+Pembaruan terakhir: 9 Juli 2026
 
 ## Ringkasan Pekerjaan yang Sudah Dilakukan
 
@@ -21,10 +21,12 @@ Pembaruan terakhir: 8 Juli 2026
 - Menambahkan Edge Function `admin-users` agar pembuatan akun menggunakan service role secara aman di sisi server.
 - Mengaktifkan editor pathway untuk Author pada status Draft dan Revision.
 - Menambahkan riwayat versi dan komentar klinis pada detail pathway.
+- Menambahkan archive/restore khusus Administrator beserta audit history pathway.
+- Menambahkan attachment dokumen pendukung pada detail pathway, termasuk upload, buka/unduh, dan hapus lampiran.
 - Menyiapkan fungsi akses data untuk pathway, departemen, profil, approval, dan notifikasi.
 - Menyiapkan skema database Supabase, Row Level Security, fungsi database, migrasi, konfigurasi lokal, dan seed data.
 - Menambahkan dokumentasi kebutuhan produk dan petunjuk backend.
-- Memverifikasi aplikasi dengan build produksi. Build berhasil tanpa error pada 8 Juli 2026.
+- Memverifikasi aplikasi dengan build produksi. Build berhasil tanpa error pada 9 Juli 2026.
 
 ## File yang Sudah Dibuat atau Diubah
 
@@ -53,6 +55,8 @@ Pembaruan terakhir: 8 Juli 2026
 - `supabase/migrations/202607080001_complete_approval_workflow.sql` — penugasan reviewer/approver otomatis, validasi role, keputusan approval, audit log, dan notifikasi.
 - `supabase/migrations/202607080002_profile_email.sql` — email profil untuk pengelolaan pengguna.
 - `supabase/migrations/202607080003_update_pathway_draft.sql` — penyimpanan perubahan draft dan revisi pathway.
+- `supabase/migrations/202607080004_archive_restore_pathway.sql` — archive/restore pathway dengan validasi role dan audit log.
+- `supabase/migrations/202607090001_attachment_management.sql` — kebijakan hapus lampiran untuk pemilik file dan administrator.
 - `BACKEND.md` — petunjuk menjalankan dan melakukan deployment backend.
 - `prd.md` — kebutuhan produk dan roadmap awal.
 - `.gitignore` — daftar file yang tidak disimpan ke Git.
@@ -64,21 +68,18 @@ Pembaruan terakhir: 8 Juli 2026
 - Grafik aktivitas dashboard masih belum menggunakan agregasi data bulanan.
 - Pagination pada Pathway Library belum diperlukan sampai jumlah data melebihi satu halaman dan belum diimplementasikan.
 - Alur lupa password belum dibuat.
-- Audit history, attachment, serta archive/restore belum tersedia pada antarmuka.
 - Beberapa karakter pada teks antarmuka mengalami masalah encoding, misalnya panah, tanda lebih besar atau sama dengan, dan bullet.
 - Belum ada pengujian otomatis untuk komponen, fungsi API, maupun alur utama pengguna.
-- Repository Git belum memiliki commit awal; seluruh file saat ini masih berstatus belum dilacak.
+- Commit baseline awal sudah dibuat; perubahan fitur archive/restore, audit history, dan attachment masih perlu commit lanjutan setelah diverifikasi.
 
 ## Langkah Berikutnya
 
-1. Menambahkan archive dan restore pathway beserta audit history pada antarmuka.
-2. Menambahkan attachment dokumen pendukung.
-3. Mengembangkan halaman Settings.
-4. Menambahkan ekspor atau unduh PDF.
-5. Menambahkan pengujian otomatis untuk autentikasi, authoring, library, dan approval.
-6. Menambahkan agregasi grafik aktivitas dashboard dan pagination Library ketika dibutuhkan.
-7. Menjalankan pemeriksaan akhir lalu membuat commit Git pertama sebagai baseline proyek.
+1. Mengembangkan halaman Settings.
+2. Menambahkan ekspor atau unduh PDF.
+3. Menambahkan pengujian otomatis untuk autentikasi, authoring, library, dan approval.
+4. Menambahkan agregasi grafik aktivitas dashboard dan pagination Library ketika dibutuhkan.
+5. Membuat commit lanjutan setelah fitur berikutnya selesai diverifikasi.
 
 ## Status Saat Ini
 
-Aplikasi telah mencapai MVP fungsional. Workflow approval dua tahap, manajemen pengguna, editor draft/revisi, dashboard/detail, Library, notifikasi, riwayat versi, dan komentar klinis sudah tersedia. Build produksi berhasil.
+Aplikasi telah mencapai MVP fungsional. Workflow approval dua tahap, manajemen pengguna, editor draft/revisi, dashboard/detail, Library, notifikasi, riwayat versi, komentar klinis, archive/restore, audit history, dan attachment dokumen pendukung sudah tersedia. Build produksi berhasil.

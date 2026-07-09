@@ -5,6 +5,7 @@ export type AppRole = 'administrator'|'author'|'reviewer'|'approver'|'viewer';
 export type ApprovalDecision = 'approved'|'rejected'|'revision_requested';
 export type PathwayInput = { code:string; title:string; summary?:string; diagnosis_name?:string; icd10_code?:string; department_id:string };
 export type DraftInput = PathwayInput & { clinical_objective?:string; inclusion_criteria?:string[]; steps:{position:number;title:string;description:string;target_duration_hours?:number}[] };
+export type PathwayAttachment = { id:string; pathway_id:string; version_id?:string|null; file_name:string; storage_path:string; mime_type?:string|null; size_bytes?:number|null; uploaded_by:string; created_at:string; profiles?:{full_name:string}|{full_name:string}[]|null };
 
 export async function signIn(email:string,password:string){
   const { data,error }=await supabase.auth.signInWithPassword({email,password});
@@ -81,3 +82,29 @@ export async function addPathwayComment(pathwayId:string,versionId:string|undefi
   const {data:{user}}=await supabase.auth.getUser(); if(!user) throw new Error('Authentication required');
   const {error}=await supabase.from('comments').insert({pathway_id:pathwayId,version_id:versionId||null,author_id:user.id,body:body.trim()}); if(error) throw error;
 }
+export async function listPathwayAttachments(pathwayId:string){
+  const {data,error}=await supabase.from('attachments').select('id,pathway_id,version_id,file_name,storage_path,mime_type,size_bytes,uploaded_by,created_at,profiles!attachments_uploaded_by_fkey(full_name)').eq('pathway_id',pathwayId).order('created_at',{ascending:false});
+  if(error) throw error; return data as unknown as PathwayAttachment[];
+}
+export async function uploadPathwayAttachment(pathwayId:string,versionId:string|undefined,file:File){
+  const {data:{user}}=await supabase.auth.getUser(); if(!user) throw new Error('Authentication required');
+  const cleanName=file.name.replace(/[^\w.\-() ]+/g,'_').slice(0,140);
+  const storagePath=`${user.id}/${pathwayId}/${Date.now()}-${cleanName}`;
+  const uploaded=await supabase.storage.from('pathway-attachments').upload(storagePath,file,{contentType:file.type||undefined,upsert:false});
+  if(uploaded.error) throw uploaded.error;
+  const {data,error}=await supabase.from('attachments').insert({pathway_id:pathwayId,version_id:versionId||null,file_name:file.name,storage_path:storagePath,mime_type:file.type||null,size_bytes:file.size,uploaded_by:user.id}).select().single();
+  if(error){ await supabase.storage.from('pathway-attachments').remove([storagePath]); throw error; }
+  return data;
+}
+export async function getAttachmentUrl(storagePath:string){
+  const {data,error}=await supabase.storage.from('pathway-attachments').createSignedUrl(storagePath,60);
+  if(error) throw error; return data.signedUrl;
+}
+export async function deletePathwayAttachment(attachment:PathwayAttachment){
+  const removed=await supabase.storage.from('pathway-attachments').remove([attachment.storage_path]);
+  if(removed.error) throw removed.error;
+  const {error}=await supabase.from('attachments').delete().eq('id',attachment.id);
+  if(error) throw error;
+}
+export async function setPathwayArchived(id:string,archived:boolean){ const {error}=await supabase.rpc('set_pathway_archived',{p_pathway_id:id,p_archived:archived}); if(error) throw error; }
+export async function getPathwayAudit(id:string){ const {data,error}=await supabase.from('audit_logs').select('id,action,old_data,new_data,created_at,profiles(full_name)').eq('entity_id',id).order('created_at',{ascending:false}); if(error) throw error; return data; }
