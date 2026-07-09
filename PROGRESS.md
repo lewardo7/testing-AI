@@ -23,6 +23,10 @@ Pembaruan terakhir: 9 Juli 2026
 - Menambahkan riwayat versi dan komentar klinis pada detail pathway.
 - Menambahkan archive/restore khusus Administrator beserta audit history pathway.
 - Menambahkan attachment dokumen pendukung pada detail pathway, termasuk upload, buka/unduh, dan hapus lampiran.
+- Mengembangkan halaman Settings untuk identitas rumah sakit, kebijakan review pathway, dan kebijakan attachment.
+- Menambahkan ekspor PDF dari detail pathway menggunakan dialog cetak browser.
+- Mengganti grafik dashboard agar menggunakan agregasi data created/published enam bulan terakhir dari database.
+- Merapikan teks aplikasi yang mengalami masalah encoding pada source aktif.
 - Menyiapkan fungsi akses data untuk pathway, departemen, profil, approval, dan notifikasi.
 - Menyiapkan skema database Supabase, Row Level Security, fungsi database, migrasi, konfigurasi lokal, dan seed data.
 - Menambahkan dokumentasi kebutuhan produk dan petunjuk backend.
@@ -57,29 +61,27 @@ Pembaruan terakhir: 9 Juli 2026
 - `supabase/migrations/202607080003_update_pathway_draft.sql` — penyimpanan perubahan draft dan revisi pathway.
 - `supabase/migrations/202607080004_archive_restore_pathway.sql` — archive/restore pathway dengan validasi role dan audit log.
 - `supabase/migrations/202607090001_attachment_management.sql` — kebijakan hapus lampiran untuk pemilik file dan administrator.
+- `supabase/migrations/202607090002_app_settings.sql` — tabel konfigurasi aplikasi dan data awal Settings.
 - `BACKEND.md` — petunjuk menjalankan dan melakukan deployment backend.
 - `prd.md` — kebutuhan produk dan roadmap awal.
 - `.gitignore` — daftar file yang tidak disimpan ke Git.
 
 ## Masalah yang Belum Selesai
 
-- Unduh PDF belum memiliki fungsi.
-- Halaman Settings masih berupa placeholder.
-- Grafik aktivitas dashboard masih belum menggunakan agregasi data bulanan.
 - Pagination pada Pathway Library belum diperlukan sampai jumlah data melebihi satu halaman dan belum diimplementasikan.
 - Alur lupa password belum dibuat.
-- Beberapa karakter pada teks antarmuka mengalami masalah encoding, misalnya panah, tanda lebih besar atau sama dengan, dan bullet.
+- Dokumen `prd.md` masih memiliki beberapa karakter encoding lama dan perlu dirapikan saat perubahan dokumen tersebut sudah aman untuk disentuh.
 - Belum ada pengujian otomatis untuk komponen, fungsi API, maupun alur utama pengguna.
-- Commit baseline awal sudah dibuat; perubahan fitur archive/restore, audit history, dan attachment masih perlu commit lanjutan setelah diverifikasi.
+- Commit baseline awal sudah dibuat; perubahan fitur archive/restore, audit history, attachment, Settings, PDF export, dan dashboard analytics masih perlu commit lanjutan setelah diverifikasi.
 
 ## Langkah Berikutnya
 
-1. Mengembangkan halaman Settings.
-2. Menambahkan ekspor atau unduh PDF.
-3. Menambahkan pengujian otomatis untuk autentikasi, authoring, library, dan approval.
-4. Menambahkan agregasi grafik aktivitas dashboard dan pagination Library ketika dibutuhkan.
-5. Membuat commit lanjutan setelah fitur berikutnya selesai diverifikasi.
+1. Menambahkan pengujian otomatis untuk autentikasi, authoring, library, dan approval.
+2. Menambahkan pagination Library ketika jumlah data sudah besar.
+3. Menambahkan alur lupa password.
+4. Merapikan encoding dokumen `prd.md` setelah perubahan dokumen tersebut siap disatukan.
+5. Membuat commit lanjutan setelah fitur terbaru selesai diverifikasi.
 
 ## Status Saat Ini
 
-Aplikasi telah mencapai MVP fungsional. Workflow approval dua tahap, manajemen pengguna, editor draft/revisi, dashboard/detail, Library, notifikasi, riwayat versi, komentar klinis, archive/restore, audit history, dan attachment dokumen pendukung sudah tersedia. Build produksi berhasil.
+Aplikasi telah mencapai MVP fungsional. Workflow approval dua tahap, manajemen pengguna, editor draft/revisi, dashboard/detail, Library, notifikasi, riwayat versi, komentar klinis, archive/restore, audit history, attachment dokumen pendukung, Settings dasar, PDF export, dan dashboard analytics berbasis data sudah tersedia. Build produksi berhasil.

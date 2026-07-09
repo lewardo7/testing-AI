@@ -6,6 +6,11 @@ export type ApprovalDecision = 'approved'|'rejected'|'revision_requested';
 export type PathwayInput = { code:string; title:string; summary?:string; diagnosis_name?:string; icd10_code?:string; department_id:string };
 export type DraftInput = PathwayInput & { clinical_objective?:string; inclusion_criteria?:string[]; steps:{position:number;title:string;description:string;target_duration_hours?:number}[] };
 export type PathwayAttachment = { id:string; pathway_id:string; version_id?:string|null; file_name:string; storage_path:string; mime_type?:string|null; size_bytes?:number|null; uploaded_by:string; created_at:string; profiles?:{full_name:string}|{full_name:string}[]|null };
+export type AppSettings = {
+  hospital:{name:string;location:string;code:string};
+  pathway_policy:{review_interval_months:number;default_reviewer_stage:string;require_revision_notes:boolean};
+  attachment_policy:{max_file_size_mb:number;allowed_types:string[]};
+};
 
 export async function signIn(email:string,password:string){
   const { data,error }=await supabase.auth.signInWithPassword({email,password});
@@ -28,10 +33,13 @@ export async function getPathway(id:string){
   if(error) throw error; return data;
 }
 export async function getDashboardData(){
-  const {data,error}=await supabase.from('clinical_pathways').select('id,title,code,status,updated_at,current_version,review_due_at,departments(name),profiles!clinical_pathways_owner_id_fkey(full_name)').order('updated_at',{ascending:false});
+  const {data,error}=await supabase.from('clinical_pathways').select('id,title,code,status,created_at,updated_at,published_at,current_version,review_due_at,departments(name),profiles!clinical_pathways_owner_id_fkey(full_name)').order('updated_at',{ascending:false});
   if(error) throw error;
   const rows=data||[]; const now=new Date(); const inThirtyDays=new Date(now.getTime()+30*86400000);
-  return {rows,total:rows.length,published:rows.filter((x:any)=>x.status==='published').length,pending:rows.filter((x:any)=>x.status==='in_review'||x.status==='approved').length,dueSoon:rows.filter((x:any)=>x.review_due_at&&new Date(x.review_due_at)>=now&&new Date(x.review_due_at)<=inThirtyDays).length};
+  const months=Array.from({length:6},(_,i)=>{const d=new Date(now.getFullYear(),now.getMonth()-5+i,1);return {key:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`,label:d.toLocaleDateString('id-ID',{month:'short'}),created:0,published:0}});
+  rows.forEach((x:any)=>{const createdKey=x.created_at?String(x.created_at).slice(0,7):''; const publishedKey=x.published_at?String(x.published_at).slice(0,7):''; const created=months.find(m=>m.key===createdKey); const published=months.find(m=>m.key===publishedKey); if(created)created.created+=1; if(published)published.published+=1;});
+  const statusCounts={published:rows.filter((x:any)=>x.status==='published').length,in_review:rows.filter((x:any)=>x.status==='in_review').length,draft:rows.filter((x:any)=>x.status==='draft'||x.status==='revision').length,archived:rows.filter((x:any)=>x.status==='archived').length,approved:rows.filter((x:any)=>x.status==='approved').length};
+  return {rows,total:rows.length,published:statusCounts.published,pending:statusCounts.in_review+statusCounts.approved,dueSoon:rows.filter((x:any)=>x.review_due_at&&new Date(x.review_due_at)>=now&&new Date(x.review_due_at)<=inThirtyDays).length,activity:months,statusCounts};
 }
 export async function createPathway(input:PathwayInput){
   const {data:{user}}=await supabase.auth.getUser(); if(!user) throw new Error('Authentication required');
@@ -78,6 +86,21 @@ export async function createUserAccount(input:{full_name:string;email:string;pas
   if(error) throw new Error((data as any)?.error||error.message); if((data as any)?.error) throw new Error((data as any).error); return data;
 }
 export async function updateUserProfile(id:string,input:{role:AppRole;department_id:string|null;is_active:boolean}){ const {error}=await supabase.from('profiles').update(input).eq('id',id); if(error) throw error; }
+export async function getAppSettings(){
+  const defaults:AppSettings={hospital:{name:'RS Sehat Sentosa',location:'Jakarta Pusat',code:'RS'},pathway_policy:{review_interval_months:6,default_reviewer_stage:'review',require_revision_notes:true},attachment_policy:{max_file_size_mb:10,allowed_types:['PDF','PNG','JPG','DOCX']}};
+  const {data,error}=await supabase.from('app_settings').select('key,value');
+  if(error) throw error;
+  return (data||[]).reduce((acc:any,row:any)=>({...acc,[row.key]:{...acc[row.key],...row.value}}),defaults) as AppSettings;
+}
+export async function updateAppSettings(settings:AppSettings){
+  const {data:{user}}=await supabase.auth.getUser(); if(!user) throw new Error('Authentication required');
+  const rows=[
+    {key:'hospital',value:settings.hospital,description:'Identitas fasilitas pelayanan kesehatan.',updated_by:user.id},
+    {key:'pathway_policy',value:settings.pathway_policy,description:'Kebijakan umum siklus clinical pathway.',updated_by:user.id},
+    {key:'attachment_policy',value:settings.attachment_policy,description:'Batas dan tipe dokumen pendukung.',updated_by:user.id},
+  ];
+  const {error}=await supabase.from('app_settings').upsert(rows,{onConflict:'key'}); if(error) throw error;
+}
 export async function addPathwayComment(pathwayId:string,versionId:string|undefined,body:string){
   const {data:{user}}=await supabase.auth.getUser(); if(!user) throw new Error('Authentication required');
   const {error}=await supabase.from('comments').insert({pathway_id:pathwayId,version_id:versionId||null,author_id:user.id,body:body.trim()}); if(error) throw error;
