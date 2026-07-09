@@ -16,6 +16,11 @@ export async function signIn(email:string,password:string){
   const { data,error }=await supabase.auth.signInWithPassword({email,password});
   if(error) throw error; return data;
 }
+export async function resetPassword(email:string){
+  const redirectTo=typeof window==='undefined'?undefined:window.location.origin;
+  const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo});
+  if(error) throw error;
+}
 export async function signOut(){ const {error}=await supabase.auth.signOut(); if(error) throw error; }
 export async function getCurrentProfile(){
   const {data:{user}}=await supabase.auth.getUser(); if(!user) return null;

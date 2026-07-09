@@ -176,25 +176,15 @@ Workflow:
 
 Draft
 
-↓
+-> Reviewer
 
-Reviewer
+-> Revision
 
-↓
+-> Reviewer
 
-Revision
+-> Approval
 
-↓
-
-Reviewer
-
-↓
-
-Approval
-
-↓
-
-Published
+-> Published
 
 ---
 
@@ -434,19 +424,19 @@ Lucide React
 
 Target pertama yang akan kita selesaikan:
 
-✅ Login
+[x] Login
 
-✅ Dashboard
+[x] Dashboard
 
-✅ Sidebar
+[x] Sidebar
 
-✅ Library
+[x] Library
 
-✅ Detail Clinic Pathway
+[x] Detail Clinic Pathway
 
-✅ Authoring
+[x] Authoring
 
-✅ Approval
+[x] Approval
 
 Belum termasuk:
 
@@ -515,15 +505,3 @@ Belum termasuk:
 * Report
 
 ---
-
-# Saya punya saran agar Codex bekerja lebih maksimal
-
-PRD di atas sudah cukup baik, tetapi **masih terlalu umum** untuk langsung diberikan ke AI. AI akan mencoba membuat semuanya sekaligus, sehingga hasilnya sering berantakan.
-
-Untuk proyek sebesar ini, saya biasanya membuat **3 dokumen terpisah**:
-
-1. **PRD (Product Requirements Document)** → menjelaskan fitur dan kebutuhan bisnis (dokumen di atas).
-2. **Technical Design Document (TDD)** → menjelaskan arsitektur aplikasi, struktur folder React, database Supabase, routing, state management, dan pola coding.
-3. **Task Breakdown / Sprint Backlog** → memecah proyek menjadi sekitar 80–120 tugas kecil yang bisa dikerjakan Codex satu per satu.
-
-Dengan pendekatan ini, Codex akan menghasilkan kode yang jauh lebih konsisten dan mudah dipelihara. Ini juga merupakan workflow yang umum digunakan oleh tim pengembangan perangkat lunak profesional. Saya sangat menyarankan kita membangun proyek Clinic Pathway menggunakan ketiga dokumen tersebut agar hasil akhirnya lebih rapi dan scalable
