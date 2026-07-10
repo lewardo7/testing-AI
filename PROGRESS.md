@@ -27,6 +27,7 @@ Pembaruan terakhir: 9 Juli 2026
 - Menyambungkan identitas rumah sakit di sidebar ke data Settings yang disimpan Administrator.
 - Menambahkan master data rumah sakit/cabang, termasuk tambah, edit, aktif/nonaktif, dan pilihan RS aktif di sidebar.
 - Menambahkan indikator bintang merah pada field wajib di form login, authoring, edit pathway, master rumah sakit, dan pembuatan user.
+- Menambahkan autocomplete ICD-10 berbasis master data `master_icd_x.json` pada form authoring dan editor pathway.
 - Menambahkan ekspor PDF dari detail pathway menggunakan dialog cetak browser.
 - Menambahkan smoke test otomatis untuk menjaga fitur utama tetap tersedia dan menjalankan build.
 - Merapikan teks aplikasi, PROGRESS, dan PRD yang mengalami masalah encoding.
@@ -45,6 +46,8 @@ Pembaruan terakhir: 9 Juli 2026
 - `src/lib/supabase.ts` - konfigurasi klien Supabase.
 - `src/lib/api.ts` - fungsi autentikasi dan akses data Supabase.
 - `src/ExistingPathwayEditor.tsx` - editor draft dan revisi pathway dengan indikator field wajib.
+- `src/IcdAutocomplete.tsx` - autocomplete kode ICD-10 dari master data.
+- `public/master_icd_x.json` - master data ICD-10 yang dibaca aplikasi saat runtime.
 - `src/PathwayHistoryComments.tsx` - riwayat versi, komentar klinis, attachment, audit history, dan archive/restore.
 - `src/vite-env.d.ts` - deklarasi tipe lingkungan Vite.
 - `scripts/smoke-tests.mjs` - smoke test otomatis untuk fitur utama.

@@ -9,6 +9,8 @@ const checks = [
   ['src/App.tsx', 'SettingsPage', 'settings tersedia'],
   ['src/App.tsx', 'Master Rumah Sakit', 'master rumah sakit tersedia'],
   ['src/App.tsx', 'exportPathwayPdf', 'PDF export tersedia'],
+  ['src/IcdAutocomplete.tsx', '/master_icd_x.json', 'autocomplete ICD-10 tersedia'],
+  ['public/master_icd_x.json', 'I63.9', 'master data ICD-10 publik tersedia'],
   ['src/lib/api.ts', 'resetPassword', 'reset password tersedia'],
   ['src/lib/api.ts', 'listHospitals', 'API master rumah sakit tersedia'],
   ['src/lib/api.ts', 'getDashboardData', 'API dashboard tersedia'],
