@@ -24,6 +24,9 @@ Pembaruan terakhir: 9 Juli 2026
 - Menambahkan archive/restore khusus Administrator beserta audit history pathway.
 - Menambahkan attachment dokumen pendukung pada detail pathway, termasuk upload, buka/unduh, dan hapus lampiran.
 - Mengembangkan halaman Settings untuk identitas rumah sakit, kebijakan review pathway, dan kebijakan attachment.
+- Menyambungkan identitas rumah sakit di sidebar ke data Settings yang disimpan Administrator.
+- Menambahkan master data rumah sakit/cabang, termasuk tambah, edit, aktif/nonaktif, dan pilihan RS aktif di sidebar.
+- Menambahkan indikator bintang merah pada field wajib di form login, authoring, edit pathway, master rumah sakit, dan pembuatan user.
 - Menambahkan ekspor PDF dari detail pathway menggunakan dialog cetak browser.
 - Menambahkan smoke test otomatis untuk menjaga fitur utama tetap tersedia dan menjalankan build.
 - Merapikan teks aplikasi, PROGRESS, dan PRD yang mengalami masalah encoding.
@@ -37,11 +40,11 @@ Pembaruan terakhir: 9 Juli 2026
 ### Frontend
 
 - `src/main.tsx` - entry point aplikasi React.
-- `src/App.tsx` - halaman login, layout utama, dashboard, library, detail pathway, authoring, approval, users, settings, pagination, PDF export, dan lupa password.
+- `src/App.tsx` - halaman login, layout utama, dashboard, library, detail pathway, authoring, approval, users, settings, master rumah sakit, indikator field wajib, identitas rumah sakit dinamis, pagination, PDF export, dan lupa password.
 - `src/styles.css` - seluruh styling dan aturan tampilan responsif aplikasi.
 - `src/lib/supabase.ts` - konfigurasi klien Supabase.
 - `src/lib/api.ts` - fungsi autentikasi dan akses data Supabase.
-- `src/ExistingPathwayEditor.tsx` - editor draft dan revisi pathway.
+- `src/ExistingPathwayEditor.tsx` - editor draft dan revisi pathway dengan indikator field wajib.
 - `src/PathwayHistoryComments.tsx` - riwayat versi, komentar klinis, attachment, audit history, dan archive/restore.
 - `src/vite-env.d.ts` - deklarasi tipe lingkungan Vite.
 - `scripts/smoke-tests.mjs` - smoke test otomatis untuk fitur utama.
@@ -63,6 +66,7 @@ Pembaruan terakhir: 9 Juli 2026
 - `supabase/migrations/202607080004_archive_restore_pathway.sql` - archive/restore pathway dengan validasi role dan audit log.
 - `supabase/migrations/202607090001_attachment_management.sql` - kebijakan hapus lampiran untuk pemilik file dan administrator.
 - `supabase/migrations/202607090002_app_settings.sql` - tabel konfigurasi aplikasi dan data awal Settings.
+- `supabase/migrations/202607100001_hospital_master.sql` - tabel master rumah sakit/cabang dan data awal dari Settings.
 - `BACKEND.md` - petunjuk menjalankan dan melakukan deployment backend.
 - `prd.md` - kebutuhan produk dan roadmap awal.
 - `.gitignore` - daftar file yang tidak disimpan ke Git.
@@ -70,14 +74,14 @@ Pembaruan terakhir: 9 Juli 2026
 ## Masalah yang Belum Selesai
 
 - Pengujian otomatis masih berupa smoke test ringan, belum mencakup interaksi browser end-to-end.
-- Commit baseline awal sudah dibuat; perubahan fitur archive/restore, audit history, attachment, Settings, PDF export, dashboard analytics, pagination, lupa password, PRD cleanup, dan smoke test masih perlu commit lanjutan setelah diverifikasi.
+- Commit baseline awal sudah dibuat; perubahan fitur archive/restore, audit history, attachment, Settings, master rumah sakit, identitas rumah sakit dinamis, PDF export, dashboard analytics, pagination, lupa password, PRD cleanup, manual book, dan smoke test masih perlu commit lanjutan setelah diverifikasi.
 
 ## Langkah Berikutnya
 
-1. Melakukan testing manual di web untuk login, lupa password, authoring, approval, PDF export, attachment, settings, dan pagination.
+1. Melakukan testing manual di web untuk login, lupa password, authoring, approval, PDF export, attachment, settings, master rumah sakit, pilihan RS aktif di sidebar, dan pagination.
 2. Membuat commit lanjutan setelah fitur terbaru selesai diverifikasi.
 3. Jika dibutuhkan, menambahkan test end-to-end browser dengan Playwright pada tahap berikutnya.
 
 ## Status Saat Ini
 
-Aplikasi telah mencapai MVP fungsional. Workflow approval dua tahap, manajemen pengguna, editor draft/revisi, dashboard/detail, Library dengan pagination, notifikasi, riwayat versi, komentar klinis, archive/restore, audit history, attachment dokumen pendukung, Settings dasar, PDF export, lupa password, dashboard analytics berbasis data, dan smoke test otomatis sudah tersedia. Build produksi berhasil.
+Aplikasi telah mencapai MVP fungsional. Workflow approval dua tahap, manajemen pengguna, editor draft/revisi, dashboard/detail, Library dengan pagination, notifikasi, riwayat versi, komentar klinis, archive/restore, audit history, attachment dokumen pendukung, Settings dasar, master rumah sakit/cabang dengan pilihan RS aktif di sidebar, PDF export, lupa password, dashboard analytics berbasis data, manual book, dan smoke test otomatis sudah tersedia. Build produksi berhasil.

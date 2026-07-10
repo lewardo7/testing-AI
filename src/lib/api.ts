@@ -6,6 +6,7 @@ export type ApprovalDecision = 'approved'|'rejected'|'revision_requested';
 export type PathwayInput = { code:string; title:string; summary?:string; diagnosis_name?:string; icd10_code?:string; department_id:string };
 export type DraftInput = PathwayInput & { clinical_objective?:string; inclusion_criteria?:string[]; steps:{position:number;title:string;description:string;target_duration_hours?:number}[] };
 export type PathwayAttachment = { id:string; pathway_id:string; version_id?:string|null; file_name:string; storage_path:string; mime_type?:string|null; size_bytes?:number|null; uploaded_by:string; created_at:string; profiles?:{full_name:string}|{full_name:string}[]|null };
+export type HospitalMaster = { id:string; name:string; code:string; location:string; address?:string|null; phone?:string|null; is_active:boolean; created_at?:string; updated_at?:string };
 export type AppSettings = {
   hospital:{name:string;location:string;code:string};
   pathway_policy:{review_interval_months:number;default_reviewer_stage:string;require_revision_notes:boolean};
@@ -91,6 +92,24 @@ export async function createUserAccount(input:{full_name:string;email:string;pas
   if(error) throw new Error((data as any)?.error||error.message); if((data as any)?.error) throw new Error((data as any).error); return data;
 }
 export async function updateUserProfile(id:string,input:{role:AppRole;department_id:string|null;is_active:boolean}){ const {error}=await supabase.from('profiles').update(input).eq('id',id); if(error) throw error; }
+export async function listHospitals(activeOnly=false){
+  let query=supabase.from('hospitals').select('id,name,code,location,address,phone,is_active,created_at,updated_at').order('name');
+  if(activeOnly) query=query.eq('is_active',true);
+  const {data,error}=await query; if(error) throw error; return data as HospitalMaster[];
+}
+export async function createHospital(input:{name:string;code:string;location:string;address?:string;phone?:string}){
+  const {data,error}=await supabase.from('hospitals').insert({name:input.name.trim(),code:input.code.trim().toUpperCase(),location:input.location.trim(),address:input.address?.trim()||null,phone:input.phone?.trim()||null}).select().single();
+  if(error) throw friendlyHospitalError(error); return data as HospitalMaster;
+}
+export async function updateHospital(id:string,input:Partial<Pick<HospitalMaster,'name'|'code'|'location'|'address'|'phone'|'is_active'>>){
+  const payload={...input} as any; if(payload.code)payload.code=String(payload.code).trim().toUpperCase(); if(payload.name)payload.name=String(payload.name).trim(); if(payload.location)payload.location=String(payload.location).trim();
+  const {data,error}=await supabase.from('hospitals').update(payload).eq('id',id).select().single();
+  if(error) throw friendlyHospitalError(error); return data as HospitalMaster;
+}
+function friendlyHospitalError(error:any){
+  if(error?.code==='23505'||String(error?.message||'').toLowerCase().includes('duplicate')) return new Error('Kode singkat rumah sakit sudah digunakan. Gunakan kode lain, misalnya RSA, RSB, APR, atau BDO.');
+  return error instanceof Error?error:new Error(error?.message||'Gagal menyimpan rumah sakit');
+}
 export async function getAppSettings(){
   const defaults:AppSettings={hospital:{name:'RS Sehat Sentosa',location:'Jakarta Pusat',code:'RS'},pathway_policy:{review_interval_months:6,default_reviewer_stage:'review',require_revision_notes:true},attachment_policy:{max_file_size_mb:10,allowed_types:['PDF','PNG','JPG','DOCX']}};
   const {data,error}=await supabase.from('app_settings').select('key,value');

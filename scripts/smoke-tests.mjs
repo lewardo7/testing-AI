@@ -7,13 +7,16 @@ const checks = [
   ['src/App.tsx', 'Approval', 'approval queue tersedia'],
   ['src/App.tsx', 'UsersPage', 'users and roles tersedia'],
   ['src/App.tsx', 'SettingsPage', 'settings tersedia'],
+  ['src/App.tsx', 'Master Rumah Sakit', 'master rumah sakit tersedia'],
   ['src/App.tsx', 'exportPathwayPdf', 'PDF export tersedia'],
   ['src/lib/api.ts', 'resetPassword', 'reset password tersedia'],
+  ['src/lib/api.ts', 'listHospitals', 'API master rumah sakit tersedia'],
   ['src/lib/api.ts', 'getDashboardData', 'API dashboard tersedia'],
   ['src/lib/api.ts', 'updateAppSettings', 'API settings tersedia'],
   ['src/PathwayHistoryComments.tsx', 'uploadPathwayAttachment', 'attachment tersedia'],
   ['supabase/migrations/202607080001_complete_approval_workflow.sql', 'decide_approval', 'workflow approval database tersedia'],
   ['supabase/migrations/202607090002_app_settings.sql', 'app_settings', 'migration settings tersedia'],
+  ['supabase/migrations/202607100001_hospital_master.sql', 'hospitals', 'migration master rumah sakit tersedia'],
 ];
 
 const failures = [];
