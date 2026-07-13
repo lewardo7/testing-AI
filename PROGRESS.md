@@ -29,6 +29,7 @@ Pembaruan terakhir: 9 Juli 2026
 - Menambahkan indikator bintang merah pada field wajib di form login, authoring, edit pathway, master rumah sakit, dan pembuatan user.
 - Menambahkan autocomplete ICD-10 berbasis master data `master_icd_x.json` pada form authoring dan editor pathway.
 - Menambahkan ekspor PDF dari detail pathway menggunakan dialog cetak browser.
+- Memperbaiki ekspor PDF agar tab cetak tidak kosong dan menyediakan tombol Print / Save PDF pada halaman cetak.
 - Menambahkan smoke test otomatis untuk menjaga fitur utama tetap tersedia dan menjalankan build.
 - Merapikan teks aplikasi, PROGRESS, dan PRD yang mengalami masalah encoding.
 - Menyiapkan fungsi akses data untuk pathway, departemen, profil, approval, notifikasi, attachment, settings, dan audit.
