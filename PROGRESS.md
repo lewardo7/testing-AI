@@ -1,6 +1,6 @@
 # Progress Pengembangan CliniPath
 
-Pembaruan terakhir: 9 Juli 2026
+Pembaruan terakhir: 15 Juli 2026
 
 ## Ringkasan Pekerjaan yang Sudah Dilakukan
 
@@ -36,6 +36,7 @@ Pembaruan terakhir: 9 Juli 2026
 - Menyiapkan skema database Supabase, Row Level Security, fungsi database, migrasi, konfigurasi lokal, dan seed data.
 - Menambahkan dokumentasi kebutuhan produk dan petunjuk backend.
 - Memverifikasi aplikasi dengan `npm run test`. Smoke test dan build produksi berhasil tanpa error pada 9 Juli 2026.
+- Menyelesaikan testing manual alur utama di web dan hasilnya sudah sesuai kebutuhan pada 15 Juli 2026.
 
 ## File yang Sudah Dibuat atau Diubah
 
@@ -78,14 +79,14 @@ Pembaruan terakhir: 9 Juli 2026
 ## Masalah yang Belum Selesai
 
 - Pengujian otomatis masih berupa smoke test ringan, belum mencakup interaksi browser end-to-end.
-- Commit baseline awal sudah dibuat; perubahan fitur archive/restore, audit history, attachment, Settings, master rumah sakit, identitas rumah sakit dinamis, PDF export, dashboard analytics, pagination, lupa password, PRD cleanup, manual book, dan smoke test masih perlu commit lanjutan setelah diverifikasi.
+- Testing manual alur utama sudah selesai dan sesuai. Belum ada catatan bug fungsional utama dari hasil testing manual terakhir.
 
 ## Langkah Berikutnya
 
-1. Melakukan testing manual di web untuk login, lupa password, authoring, approval, PDF export, attachment, settings, master rumah sakit, pilihan RS aktif di sidebar, dan pagination.
-2. Membuat commit lanjutan setelah fitur terbaru selesai diverifikasi.
-3. Jika dibutuhkan, menambahkan test end-to-end browser dengan Playwright pada tahap berikutnya.
+1. Membuat commit dokumentasi status MVP stabil setelah pembaruan PROGRESS.md ini.
+2. Jika dibutuhkan, membuat tag Git untuk menandai versi stabil internal pertama, misalnya `v0.1.0-mvp`.
+3. Jika dibutuhkan pada tahap berikutnya, menambahkan test end-to-end browser dengan Playwright.
 
 ## Status Saat Ini
 
-Aplikasi telah mencapai MVP fungsional. Workflow approval dua tahap, manajemen pengguna, editor draft/revisi, dashboard/detail, Library dengan pagination, notifikasi, riwayat versi, komentar klinis, archive/restore, audit history, attachment dokumen pendukung, Settings dasar, master rumah sakit/cabang dengan pilihan RS aktif di sidebar, PDF export, lupa password, dashboard analytics berbasis data, manual book, dan smoke test otomatis sudah tersedia. Build produksi berhasil.
+Aplikasi telah mencapai MVP stabil internal. Workflow approval dua tahap, manajemen pengguna, editor draft/revisi, dashboard/detail, Library dengan pagination, notifikasi, riwayat versi, komentar klinis, archive/restore, audit history, attachment dokumen pendukung, Settings dasar, master rumah sakit/cabang dengan pilihan RS aktif di sidebar, PDF export, lupa password, dashboard analytics berbasis data, manual book, dan smoke test otomatis sudah tersedia. Testing manual alur utama sudah selesai dan sesuai kebutuhan. Build produksi berhasil.
